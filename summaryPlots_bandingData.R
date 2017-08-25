@@ -1,5 +1,3 @@
-library(socorro)
-
 setwd('~/Dropbox/Research/warbler')
 
 allDat <- read.csv('birdBandingData/birdBanding_clean.csv', as.is = TRUE)
