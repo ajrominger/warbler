@@ -82,16 +82,23 @@ morphoGood <- lapply(morphoCols, function(m) {
     return(unlist(out))
 })
 
-morphoGood <- unlist(morphoGood)
 
-## make `allDat` tidy
-allDat <- data.frame(do.call(rbind, replicate(length(morphoCols), 
-                                              allDat[, !(names(allDat) %in% morphoCols)], 
-                                              simplify = FALSE)),
-                     morpho = rep(morphoCols, each = nrow(allDat)), 
-                     value = unlist(allDat[, morphoCols]), 
-                     good = morphoGood)
+morphoGood <- do.call(data.frame, morphoGood)
+names(morphoGood) <- paste('good', morphoCols, sep = '_')
 
-allDat <- allDat[!is.na(allDat$value), ]
+## combine allDat with whether morpho traits are outliers
+allDat <- cbind(allDat, morphoGood)
+
+# morphoGood <- unlist(morphoGood)
+# 
+# ## make `allDat` tidy
+# allDat <- data.frame(do.call(rbind, replicate(length(morphoCols), 
+#                                               allDat[, !(names(allDat) %in% morphoCols)], 
+#                                               simplify = FALSE)),
+#                      morpho = rep(morphoCols, each = nrow(allDat)), 
+#                      value = unlist(allDat[, morphoCols]), 
+#                      good = morphoGood)
+# 
+# allDat <- allDat[!is.na(allDat$value), ]
 
 write.csv(allDat, file.path(dataWD, 'birdBanding_clean.csv'), row.names = FALSE)
