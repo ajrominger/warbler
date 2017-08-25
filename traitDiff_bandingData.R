@@ -1,3 +1,6 @@
+## a script to look at trait (including time) differences between species 
+## co-occuring at a site
+
 library(plyr)
 
 setwd('~/Dropbox/Research/warbler')

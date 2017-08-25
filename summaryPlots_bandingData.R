@@ -1,3 +1,6 @@
+## script to make summary plots of banding data
+## so far consists of a big plot showing how the cuttoff work for removing outliers
+
 setwd('~/Dropbox/Research/warbler')
 
 allDat <- read.csv('birdBandingData/birdBanding_clean.csv', as.is = TRUE)
