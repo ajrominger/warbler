@@ -94,4 +94,4 @@ allDat <- data.frame(do.call(rbind, replicate(length(morphoCols),
 
 allDat <- allDat[!is.na(allDat$value), ]
 
-write.csv(allDat, 'birdBanding_clean.csv', row.names = FALSE)
+write.csv(allDat, file.path(dataWD, 'birdBanding_clean.csv'), row.names = FALSE)
