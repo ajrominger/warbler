@@ -1,0 +1,44 @@
+---
+title: "Generating the data"
+author: "A. J. Rominger"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generating the data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+bibliography: warbler.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This vignette documents how to reproduce from raw source material the derived data associated with package *warbler*. Producing these data depends on functions defined in the *warbler* package so we first need to install and load that package:
+
+```{r, eval=FALSE}
+devtools::install_github('ajrominger/wabler')
+library(warbler)
+```
+
+## Obtaining the Parulidae phylogeny
+
+The Parulidae phylogeny [@lovette2010] used in this study is easy and quick to obtain through the Open Tree of Life [@hinchliff2015] and so is not included as data in the warbler packge.  To obtain the phylogeny we simply query the Open Tree of Life through the *rotl* package:
+
+```{r, eval = FALSE}
+library(ape)
+library(rotl)
+
+wtre <- get_study_tree(study_id = 'pg_2591', tree_id = 'tree6024')
+```
+
+## Extracting expert range map polygons
+
+Expert ranges were obtained from Bird Life International by requesting them here: <http://datazone.birdlife.org/species/requestdis>. As of the receiving date  (22 November 2018) those data are provided as an ESRI geodatabase file.  We have to match the taxonomy of the @lovette2010 phylogeny with the taxonomy of the Bird Life International maps.  I do by first looking for complete matches, and then filling in unmatched taxa by hand by searching for known synonyms of the unmatched taxa until a match is found.  The resulting synonymns table is included as data with the *warbler* package.
+
+The function `extractSppBirdLife` extracts specific species of interest from the large database file provided by Bird Life International.  The script `inst/get_all_ranges.R` extracts all the ranges of Parulidae and saves them to the `data` directory.  It is reproduced below:
+
+```{r code=readLines('../inst/get_all_ranges.R'), eval=FALSE}
+```
+
+## References
