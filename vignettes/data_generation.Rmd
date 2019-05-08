@@ -36,7 +36,7 @@ wtre <- get_study_tree(study_id = 'pg_2591', tree_id = 'tree6024')
 
 Expert ranges were obtained from Bird Life International by requesting them here: <http://datazone.birdlife.org/species/requestdis>. As of the receiving date  (22 November 2018) those data are provided as an ESRI geodatabase file.  We have to match the taxonomy of the @lovette2010 phylogeny with the taxonomy of the Bird Life International maps.  I do by first looking for complete matches, and then filling in unmatched taxa by hand by searching for known synonyms of the unmatched taxa until a match is found.  The resulting synonymns table is included as data with the *warbler* package.
 
-The function `extractSppBirdLife` extracts specific species of interest from the large database file provided by Bird Life International.  The script `inst/get_all_ranges.R` extracts all the ranges of Parulidae and saves them to the `data` directory.  It is reproduced below:
+The function `extractSppBirdLife` extracts specific species of interest from the large database file provided by Bird Life International.  The script `inst/get_all_ranges.R` uses this function to extract all the ranges of Parulidae and save them to the `data` directory.  It is reproduced below; note that this script uses a machine-specific path outside the *warbler* package directory.
 
 ```{r code=readLines('../inst/get_all_ranges.R'), eval=FALSE}
 ```
