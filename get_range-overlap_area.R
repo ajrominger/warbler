@@ -42,19 +42,31 @@ intersectionArea <- function(spgeom1, spgeom2) {
 allComp <- outer(wrange$name, wrange$name, paste, sep = '_')
 allComp <- allComp[lower.tri(allComp)]
 allComp <- do.call(rbind, strsplit(allComp, '_'))
+colnames(allComp) <- c('species1', 'species2')
 
 
 # loop through calculating overlap
-allROver <- parallel::mclapply(1:nrow(allComp), mc.cores = 10, FUN = function(i) {
-    print(i)
-    thisComp <- allComp[i, ]
-    intersectionArea(wrange[wrange$name == thisComp[1], ], wrange[wrange$name == thisComp[2], ])
+allROver <- parallel::mclapply(1:nrow(allComp), mc.cores = 10, mc.preschedule = FALSE, 
+                               FUN = function(i) {
+                                   print(i)
+                                   thisComp <- allComp[i, ]
+                                   out <- try(intersectionArea(wrange[wrange$name == thisComp[1], ], 
+                                                               wrange[wrange$name == thisComp[2], ]), 
+                                              silent = TRUE)
+                                   
+                                   if(class(out) == 'try-error') {
+                                       print(paste(i, out, sep = ': '))
+                                       return(c(area1 = NA, area2 = NA, intersection = NA))
+                                   } else {
+                                       return(out)
+                                   }
 })
-allROver <- as.data.frame(do.call(rbind, allROver))
+
+allROver <- as.data.frame(cbind(allComp, as.data.frame(do.call(rbind, allROver))))
 
 # calculate various proportional overlaps and differences
-allROver$prop_interA1 <- allROver$itersection / allROver$area1
-allROver$prop_interA2 <- allROver$itersection / allROver$area2
+allROver$prop_interA1 <- allROver$intersection / allROver$area1
+allROver$prop_interA2 <- allROver$intersection / allROver$area2
 allROver$prop_interAvg <- (allROver$prop_interA1 + allROver$prop_interA2) / 2
 allROver$diff <- abs(allROver$area1 - allROver$area2)
 allROver$prop_diff <- allROver$diff / (allROver$area1 + allROver$area2 - allROver$intersection)
